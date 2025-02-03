@@ -48,31 +48,25 @@ public class Carol {
                         }
                         return true;
                     default:
-                        out.println(lined(" Added: " + msg + "\n"));
-                        list.add(new Task(msg));
-                        return true;
+
                 }
             default:
-                switch (msg.split("\\s+")[0]) {
+                String action = msg.split("\\s+")[0];
+                switch (action) {
                     case "mark":
-                        String[] markmsg = msg.split(" ");
-                        if (markmsg.length != 2) {
-                            out.println(ERROR_MSG);
-                        }
-                        else if (Integer.parseInt(markmsg[1]) > list.size() || Integer.parseInt(markmsg[1]) < 1) {
-                            out.println(ERROR_MSG);
-                        }
-                        else {
-                            int i = Integer.parseInt(markmsg[1]) - 1;
-                            Task t = list.get(i);
-                            t.markAsDone();
-                            String s = lined(String.format("Nice! I've marked this task as done!\n    %s\n", t));
-                            out.println(s);
-                        }
+                        String markmsg = msg.split(" ")[1];
+                        int i = Integer.parseInt(markmsg) - 1;
+                        Task t = list.get(i);
+                        t.markAsDone();
+                        String s = lined(String.format("Nice! I've marked this task as done!\n    %s\n", t));
+                        out.println(s);
+                        return true;
+                    case "event", "deadline", "todo":
+                        String actionmsg = msg.substring(action.length() + 1);
+                        addtoList(action, actionmsg, list);
                         return true;
                     default:
-                        out.println(lined(" Added: " + msg + "\n"));
-                        list.add(new Task(msg));
+                        out.println(ERROR_MSG);
                         return true;
                 }
         }
@@ -81,5 +75,35 @@ public class Carol {
     public static String lined(String s) {
         String line = "⸺".repeat(80) + "\n";
         return line + s + line;
+    }
+
+    public static void addtoList(String action, String msg, ArrayList<Task> list) {
+        String addmsg = " Got it. I've added this task to your list:\n";
+        msg = msg.trim();
+        switch (action) {
+            case "todo":
+                ToDo td = new ToDo(msg);
+                list.add(td);
+                out.println(lined(String.format("%s" + "  %s\n " + "Now you have %d tasks in your list.\n", addmsg, td, list.size())));
+                break;
+            case "deadline":
+                String deadlinemsg = msg.split(" /by ")[0];
+                String deadline = msg.split(" /by ")[1];
+                Deadline dl = new Deadline(deadlinemsg, deadline);
+                list.add(dl);
+                out.println(lined(String.format("%s" + "  %s\n " + "Now you have %d tasks in your list.\n", addmsg, dl, list.size())));
+                break;
+            case "event":
+                String eventmsg = msg.split(" /from ")[0];
+                String event = msg.split(" /from ")[1];
+                String start = event.split(" /to ")[0];
+                String end = event.split(" /to ")[1];
+                Event ev = new Event(eventmsg, start, end);
+                list.add(ev);
+                out.println(lined(String.format("%s" + "  %s\n " + "Now you have %d tasks in your list.\n", addmsg, ev, list.size())));
+                break;
+                default:
+                    out.println(ERROR_MSG);
+        }
     }
 }
