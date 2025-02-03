@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import static java.lang.System.out;
 
 public class Carol {
-    public static final String INTRO_MSG = lined(" Hello! I'm Carol, your personal assistant.\n"
-            + " What can I do for you?\n");
+    public static final String INTRO_MSG = lined("""
+             Hello! I'm Carol, your personal assistant.
+             What can I do for you?
+            """);
     public static final String END_MSG = lined(" Bye! Hope to hear from you soon!\n");
     public static final String ERROR_MSG = lined(" Please enter a valid command!\n");
     public static ArrayList<Task> list = new ArrayList<>();
@@ -14,62 +16,41 @@ public class Carol {
     public static void main(String[] args) throws IOException {
         out.println(INTRO_MSG);
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String msg = br.readLine().trim();
-        boolean running = command(msg);
+        String inp = br.readLine().trim();
+        boolean running = command(inp);
         while (running) {
-            msg = br.readLine().trim();
-            running = command(msg);
+            inp = br.readLine().trim();
+            running = command(inp);
         }
     }
 
-    public static boolean command(String msg) {
-        int msglength = msg.split("\\s+").length;
-        switch (msglength) {
-            case 0:
-                out.println(ERROR_MSG);
-                return true;
-            case 1:
-                switch (msg) {
-                    case "bye":
-                        out.println(END_MSG);
-                        return false;
-                    case "list":
-                        if (list.isEmpty()) {
-                            out.println(lined(" Your list is empty!\n"));
-                        }
-                        else {
-                            StringBuilder sb = new StringBuilder();
-                            sb.append(" Here are the tasks in your list:\n");
-                            int i = 1;
-                            for (Task t: list) {
-                                sb.append(" " + i++ + "." + t.toString() + "\n");
-                            }
-                            out.println(lined(sb.toString()));
-                        }
-                        return true;
-                    default:
-
-                }
+    public static boolean command(String inp) {
+        if (inp.isEmpty()) return true;
+        String action = inp.split("\\s+")[0];
+        String msg = inp.substring(action.length()).trim();
+        switch (action) {
+            case "bye":
+                return byeaction(msg);
+            case "list":
+                listaction(msg);
+                break;
+            case "mark":
+                markaction(msg);
+                break;
+            case "todo":
+                todoaction(msg);
+                break;
+            case "deadline":
+                deadlineaction(msg);
+                break;
+            case "event":
+                eventaction(msg);
+                break;
             default:
-                String action = msg.split("\\s+")[0];
-                switch (action) {
-                    case "mark":
-                        String markmsg = msg.split(" ")[1];
-                        int i = Integer.parseInt(markmsg) - 1;
-                        Task t = list.get(i);
-                        t.markAsDone();
-                        String s = lined(String.format("Nice! I've marked this task as done!\n    %s\n", t));
-                        out.println(s);
-                        return true;
-                    case "event", "deadline", "todo":
-                        String actionmsg = msg.substring(action.length() + 1);
-                        addtoList(action, actionmsg, list);
-                        return true;
-                    default:
-                        out.println(ERROR_MSG);
-                        return true;
-                }
+                out.println(ERROR_MSG);
+                break;
         }
+        return true;
     }
 
     public static String lined(String s) {
@@ -77,33 +58,111 @@ public class Carol {
         return line + s + line;
     }
 
-    public static void addtoList(String action, String msg, ArrayList<Task> list) {
-        String addmsg = " Got it. I've added this task to your list:\n";
+    public static boolean byeaction(String msg) {
+        if (msg.isEmpty()) {
+            out.println(END_MSG);
+            return false;
+        }
+        else {
+            out.println(ERROR_MSG);
+            return true;
+        }
+    }
+    public static void listaction(String msg) {
+        if (list.isEmpty()) {
+            out.println(lined(" Your list is empty!\n"));
+        }
+        else if (!msg.isEmpty()) {
+            out.println(ERROR_MSG);
+        }
+        else {
+            StringBuilder sb = new StringBuilder();
+            sb.append(" Here are the tasks in your list:\n");
+            int i = 1;
+            for (Task t : list) {
+                sb.append(" ").append(i++).append(".").append(t.toString()).append("\n");
+            }
+            out.println(lined(sb.toString()));
+        }
+    }
+
+    public static void markaction(String msg) {
+        if (!(msg.length() == 1)) {
+            out.println(ERROR_MSG);
+            return;
+        }
+
+        int i = Integer.parseInt(msg) - 1;
+        if (i < 0 || i > list.size() - 1) {
+            out.println(ERROR_MSG);
+            return;
+        }
+        Task t = list.get(i);
+        t.markAsDone();
+        String s = lined(String.format("Nice! I've marked this task as done!\n    %s\n", t));
+        out.println(s);
+    }
+
+    public static void todoaction(String msg) {
+        if (msg.isEmpty()) {
+            out.println(ERROR_MSG);
+            return;
+        }
+        String addmsg = "Got it. I've added this task to your list:";
         msg = msg.trim();
-        switch (action) {
-            case "todo":
-                ToDo td = new ToDo(msg);
-                list.add(td);
-                out.println(lined(String.format("%s" + "  %s\n " + "Now you have %d tasks in your list.\n", addmsg, td, list.size())));
-                break;
-            case "deadline":
-                String deadlinemsg = msg.split(" /by ")[0];
-                String deadline = msg.split(" /by ")[1];
-                Deadline dl = new Deadline(deadlinemsg, deadline);
-                list.add(dl);
-                out.println(lined(String.format("%s" + "  %s\n " + "Now you have %d tasks in your list.\n", addmsg, dl, list.size())));
-                break;
-            case "event":
-                String eventmsg = msg.split(" /from ")[0];
-                String event = msg.split(" /from ")[1];
-                String start = event.split(" /to ")[0];
-                String end = event.split(" /to ")[1];
-                Event ev = new Event(eventmsg, start, end);
-                list.add(ev);
-                out.println(lined(String.format("%s" + "  %s\n " + "Now you have %d tasks in your list.\n", addmsg, ev, list.size())));
-                break;
-                default:
-                    out.println(ERROR_MSG);
+        ToDo td = new ToDo(msg);
+        list.add(td);
+        out.println(lined(String.format("""
+                     %s
+                      %s
+                     Now you have %d tasks in your list.
+                    """, addmsg, td, list.size())));
+    }
+
+    public static void deadlineaction(String msg) {
+        if (msg.isEmpty()) {
+            out.println(ERROR_MSG);
+            return;
+        }
+        else if (msg.split(" /by ").length != 2) {
+            out.println(ERROR_MSG);
+            return;
+        }
+        String addmsg = "Got it. I've added this task to your list:";
+        msg = msg.trim();
+        String deadlinemsg = msg.split(" /by ")[0];
+        String deadline = msg.split(" /by ")[1];
+        Deadline dl = new Deadline(deadlinemsg, deadline);
+        list.add(dl);
+        out.println(lined(String.format("""
+                     %s
+                      %s
+                     Now you have %d tasks in your list.
+                    """, addmsg, dl, list.size())));
+    }
+
+    public static void eventaction(String msg) {
+        if (msg.isEmpty()) {
+            out.println(ERROR_MSG);
+            return;
+        }
+        String addmsg = "Got it. I've added this task to your list:";
+        msg = msg.trim();
+        if (msg.split(" /from ").length != 2 || msg.split(" /to ").length != 2) {
+            out.println(ERROR_MSG);
+        }
+        else {
+            String eventmsg = msg.split(" /from ")[0];
+            String event = msg.split(" /from ")[1];
+            String start = event.split(" /to ")[0];
+            String end = event.split(" /to ")[1];
+            Event ev = new Event(eventmsg, start, end);
+            list.add(ev);
+            out.println(lined(String.format("""
+                     %s
+                      %s
+                     Now you have %d tasks in your list.
+                    """, addmsg, ev, list.size())));
         }
     }
 }
