@@ -37,6 +37,9 @@ public class Carol {
             case "mark":
                 markaction(msg);
                 break;
+            case "delete":
+                deleteaction(msg);
+                break;
             case "todo":
                 todoaction(msg);
                 break;
@@ -99,8 +102,30 @@ public class Carol {
         }
         Task t = list.get(i);
         t.markAsDone();
-        String s = lined(String.format("Nice! I've marked this task as done!\n    %s\n", t));
+        String s = lined(String.format("""
+                 Nice! I've marked this task as done!
+                    %s
+                """, t));
         out.println(s);
+    }
+
+    public static void deleteaction(String msg) {
+        if (!(msg.length() == 1)) {
+            out.println(ERROR_MSG);
+            return;
+        }
+
+        int i = Integer.parseInt(msg) - 1;
+        if (i < 0 || i > list.size() - 1) {
+            out.println(ERROR_MSG);
+            return;
+        }
+        Task t = list.remove(i);
+        out.println(lined(String.format("""
+                     Noted. I've removed this task:
+                        %s
+                     Now you have %d tasks left
+                    """, t, list.size())));
     }
 
     public static void todoaction(String msg) {
@@ -114,7 +139,7 @@ public class Carol {
         list.add(td);
         out.println(lined(String.format("""
                      %s
-                      %s
+                        %s
                      Now you have %d tasks in your list.
                     """, addmsg, td, list.size())));
     }
@@ -136,7 +161,7 @@ public class Carol {
         list.add(dl);
         out.println(lined(String.format("""
                      %s
-                      %s
+                        %s
                      Now you have %d tasks in your list.
                     """, addmsg, dl, list.size())));
     }
@@ -160,7 +185,7 @@ public class Carol {
             list.add(ev);
             out.println(lined(String.format("""
                      %s
-                      %s
+                        %s
                      Now you have %d tasks in your list.
                     """, addmsg, ev, list.size())));
         }
