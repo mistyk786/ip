@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Task {
     private String description;
     private boolean isDone;
@@ -38,13 +41,19 @@ public class Task {
                 }
                 return t;
             case "D":
-                Deadline d = new Deadline(description, parts[3]);
+                LocalDate deadlineDate = LocalDate.parse(parts[3].split(" ")[0]);
+                LocalTime deadlineTime = LocalTime.parse(parts[3].split(" ")[1]);
+                Deadline d = new Deadline(description, deadlineDate, deadlineTime   );
                 if (isDone) {
                     d.markAsDone();
                 }
                 return d;
             case "E":
-                Event e = new Event(description, parts[3], parts[4]);
+                LocalDate eventDateStart = LocalDate.parse(parts[3].split(" ")[0]);
+                LocalTime eventTimeStart = LocalTime.parse(parts[3].split(" ")[1]);
+                LocalDate eventDateEnd = LocalDate.parse(parts[4].split(" ")[0]);
+                LocalTime eventTimeEnd = LocalTime.parse(parts[4].split(" ")[1]);
+                Event e = new Event(description, eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd);
                 if (isDone) {
                     e.markAsDone();
                 }
