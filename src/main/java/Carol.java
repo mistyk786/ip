@@ -1,59 +1,57 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import static java.lang.System.out;
 
 public class Carol {
-    public static final String INTRO_MSG = lined("""
+    public static String INTRO_MSG = lined("""
              Hello! I'm Carol, your personal assistant.
              What can I do for you?
             """);
-    public static final String END_MSG = lined(" Bye! Hope to hear from you soon!\n");
-    public static final String ERROR_MSG = lined(" Please enter a valid command!\n");
+    public static String END_MSG = lined(" Bye! Hope to hear from you soon!\n");
+    public static String ERROR_MSG = lined(" Please enter a valid command!\n");
     public static ArrayList<Task> list = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         out.println(INTRO_MSG);
+        list = loadTasks();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String inp = br.readLine().trim();
-        boolean running = command(inp);
+        boolean running = true;
         while (running) {
-            inp = br.readLine().trim();
-            running = command(inp);
-        }
-    }
+            String inp = br.readLine().trim();
+            if (inp.isEmpty()) continue;
+            String action = inp.split("\\s+")[0];
+            String msg = inp.substring(action.length()).trim();
 
-    public static boolean command(String inp) {
-        if (inp.isEmpty()) return true;
-        String action = inp.split("\\s+")[0];
-        String msg = inp.substring(action.length()).trim();
-        switch (action) {
-            case "bye":
-                return byeaction(msg);
-            case "list":
-                listaction(msg);
-                break;
-            case "mark":
-                markaction(msg);
-                break;
-            case "delete":
-                deleteaction(msg);
-                break;
-            case "todo":
-                todoaction(msg);
-                break;
-            case "deadline":
-                deadlineaction(msg);
-                break;
-            case "event":
-                eventaction(msg);
-                break;
-            default:
-                out.println(ERROR_MSG);
-                break;
+            switch (action) {
+                case "bye":
+                    running = byeaction(msg);
+                    break;
+                case "list":
+                    listaction(msg);
+                    break;
+                case "mark":
+                    markaction(msg);
+                    break;
+                case "unmark":
+                    unmarkaction(msg);
+                    break;
+                case "delete":
+                    deleteaction(msg);
+                    break;
+                case "todo":
+                    todoaction(msg);
+                    break;
+                case "deadline":
+                    deadlineaction(msg);
+                    break;
+                case "event":
+                    eventaction(msg);
+                    break;
+                default:
+                    out.println(ERROR_MSG);
+                    break;
+            }
         }
-        return true;
     }
 
     public static String lined(String s) {
@@ -64,6 +62,7 @@ public class Carol {
     public static boolean byeaction(String msg) {
         if (msg.isEmpty()) {
             out.println(END_MSG);
+            saveTasks();
             return false;
         }
         else {
@@ -81,9 +80,8 @@ public class Carol {
         else {
             StringBuilder sb = new StringBuilder();
             sb.append(" Here are the tasks in your list:\n");
-            int i = 1;
             for (Task t : list) {
-                sb.append(" ").append(i++).append(".").append(t.toString()).append("\n");
+                sb.append(" ").append(t.toString()).append("\n");
             }
             out.println(lined(sb.toString()));
         }
@@ -104,6 +102,26 @@ public class Carol {
         t.markAsDone();
         String s = lined(String.format("""
                  Nice! I've marked this task as done!
+                    %s
+                """, t));
+        out.println(s);
+    }
+
+    public static void unmarkaction(String msg) {
+        if (!(msg.length() == 1)) {
+            out.println(ERROR_MSG);
+            return;
+        }
+
+        int i = Integer.parseInt(msg) - 1;
+        if (i < 0 || i > list.size() - 1) {
+            out.println(ERROR_MSG);
+            return;
+        }
+        Task t = list.get(i);
+        t.markAsUndone();
+        String s = lined(String.format("""
+                 I've undone this task
                     %s
                 """, t));
         out.println(s);
@@ -188,6 +206,43 @@ public class Carol {
                         %s
                      Now you have %d tasks in your list.
                     """, addmsg, ev, list.size())));
+        }
+    }
+
+    public static ArrayList<Task> loadTasks() {
+        boolean directoryExists = new File("data").exists();
+        if (!directoryExists) {
+            new File("data").mkdir();
+        }
+        File dataFile = new File("data/Carol.txt");
+        if (!dataFile.exists()) {
+            try {
+                dataFile.createNewFile();
+            }
+            catch (IOException e) {
+                out.println("Error creating data file.");
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(dataFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                Task t = Task.parseTask(line);
+                if (t != null) list.add(t);
+            }
+        } catch (IOException e) {
+            out.println("Error loading tasks.");
+        }
+        return list;
+    }
+
+    public static void saveTasks() {
+        File file = new File("data/carol.txt");
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            for (Task t : list) {
+                bw.write(t.toString() + "\n");
+            }
+        } catch (IOException e) {
+            out.println("Error saving tasks.");
         }
     }
 }
