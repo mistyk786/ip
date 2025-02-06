@@ -1,8 +1,14 @@
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import static java.lang.System.out;
 
+
 public class Carol {
+    public enum Command {
+        bye, list, mark, unmark, delete, todo, deadline, event
+    }
     public static String INTRO_MSG = lined("""
              Hello! I'm Carol, your personal assistant.
              What can I do for you?
@@ -19,33 +25,32 @@ public class Carol {
         while (running) {
             String inp = br.readLine().trim();
             if (inp.isEmpty()) continue;
-            String action = inp.split("\\s+")[0];
-            String msg = inp.substring(action.length()).trim();
-
+            Command action = Command.valueOf(inp.split("\\s+")[0]);
+            String msg = inp.substring(action.toString().length()).trim();
             switch (action) {
-                case "bye":
-                    running = byeaction(msg);
+                case bye:
+                    running = byeAction(msg);
                     break;
-                case "list":
-                    listaction(msg);
+                case list:
+                    listAction(msg);
                     break;
-                case "mark":
-                    markaction(msg);
+                case mark:
+                    markAction(msg);
                     break;
-                case "unmark":
-                    unmarkaction(msg);
+                case unmark:
+                    unmarkAction(msg);
                     break;
-                case "delete":
-                    deleteaction(msg);
+                case delete:
+                    deleteAction(msg);
                     break;
-                case "todo":
-                    todoaction(msg);
+                case todo:
+                    todoAction(msg);
                     break;
-                case "deadline":
-                    deadlineaction(msg);
+                case deadline:
+                    deadlineAction(msg);
                     break;
-                case "event":
-                    eventaction(msg);
+                case event:
+                    eventAction(msg);
                     break;
                 default:
                     out.println(ERROR_MSG);
@@ -59,7 +64,7 @@ public class Carol {
         return line + s + line;
     }
 
-    public static boolean byeaction(String msg) {
+    public static boolean byeAction(String msg) {
         if (msg.isEmpty()) {
             out.println(END_MSG);
             saveTasks();
@@ -70,7 +75,7 @@ public class Carol {
             return true;
         }
     }
-    public static void listaction(String msg) {
+    public static void listAction(String msg) {
         if (list.isEmpty()) {
             out.println(lined(" Your list is empty!\n"));
         }
@@ -87,7 +92,7 @@ public class Carol {
         }
     }
 
-    public static void markaction(String msg) {
+    public static void markAction(String msg) {
         if (!(msg.length() == 1)) {
             out.println(ERROR_MSG);
             return;
@@ -107,7 +112,7 @@ public class Carol {
         out.println(s);
     }
 
-    public static void unmarkaction(String msg) {
+    public static void unmarkAction(String msg) {
         if (!(msg.length() == 1)) {
             out.println(ERROR_MSG);
             return;
@@ -127,7 +132,7 @@ public class Carol {
         out.println(s);
     }
 
-    public static void deleteaction(String msg) {
+    public static void deleteAction(String msg) {
         if (!(msg.length() == 1)) {
             out.println(ERROR_MSG);
             return;
@@ -146,12 +151,12 @@ public class Carol {
                     """, t, list.size())));
     }
 
-    public static void todoaction(String msg) {
+    public static void todoAction(String msg) {
         if (msg.isEmpty()) {
             out.println(ERROR_MSG);
             return;
         }
-        String addmsg = "Got it. I've added this task to your list:";
+        String addMessage = "Got it. I've added this task to your list:";
         msg = msg.trim();
         ToDo td = new ToDo(msg);
         list.add(td);
@@ -159,10 +164,10 @@ public class Carol {
                      %s
                         %s
                      Now you have %d tasks in your list.
-                    """, addmsg, td, list.size())));
+                    """, addMessage, td, list.size())));
     }
 
-    public static void deadlineaction(String msg) {
+    public static void deadlineAction(String msg) {
         if (msg.isEmpty()) {
             out.println(ERROR_MSG);
             return;
@@ -171,41 +176,47 @@ public class Carol {
             out.println(ERROR_MSG);
             return;
         }
-        String addmsg = "Got it. I've added this task to your list:";
+        String addMessage = "Got it. I've added this task to your list:";
         msg = msg.trim();
-        String deadlinemsg = msg.split(" /by ")[0];
-        String deadline = msg.split(" /by ")[1];
-        Deadline dl = new Deadline(deadlinemsg, deadline);
+        String deadlineDescription = msg.split(" /by ")[0];
+        String deadlineString = msg.split(" /by ")[1].trim();
+        LocalDate deadlineDate = LocalDate.parse(deadlineString.split(" ")[0]);
+        LocalTime deadlineTime = LocalTime.parse(deadlineString.split(" ")[1]);
+        Deadline dl = new Deadline(deadlineDescription, deadlineDate, deadlineTime);
         list.add(dl);
         out.println(lined(String.format("""
                      %s
                         %s
                      Now you have %d tasks in your list.
-                    """, addmsg, dl, list.size())));
+                    """, addMessage, dl, list.size())));
     }
 
-    public static void eventaction(String msg) {
+    public static void eventAction(String msg) {
         if (msg.isEmpty()) {
             out.println(ERROR_MSG);
             return;
         }
-        String addmsg = "Got it. I've added this task to your list:";
+        String addMessage = "Got it. I've added this task to your list:";
         msg = msg.trim();
         if (msg.split(" /from ").length != 2 || msg.split(" /to ").length != 2) {
             out.println(ERROR_MSG);
         }
         else {
-            String eventmsg = msg.split(" /from ")[0];
-            String event = msg.split(" /from ")[1];
-            String start = event.split(" /to ")[0];
-            String end = event.split(" /to ")[1];
-            Event ev = new Event(eventmsg, start, end);
+            String eventMessage = msg.split(" /from ")[0];
+            String eventTimings = msg.split(" /from ")[1];
+            String eventStartString =  eventTimings.split(" /to ")[0];
+            String eventEndString = eventTimings.split(" /to ")[1];
+            String eventDateStart = eventStartString.split(" ")[0];
+            String eventTimeStart = eventStartString.split(" ")[1];
+            String eventDateEnd = eventEndString.split(" ")[0];
+            String eventTimeEnd = eventEndString.split(" ")[1];
+            Event ev = new Event(eventMessage, LocalDate.parse(eventDateStart), LocalDate.parse(eventDateEnd), LocalTime.parse(eventTimeStart), LocalTime.parse(eventTimeEnd));
             list.add(ev);
             out.println(lined(String.format("""
                      %s
                         %s
                      Now you have %d tasks in your list.
-                    """, addmsg, ev, list.size())));
+                    """, addMessage, ev, list.size())));
         }
     }
 
