@@ -3,8 +3,8 @@ package commands;
 import tasks.Tasklist;
 import io.Ui;
 
-public class deleteCommand extends Command {
-    public deleteCommand(String message) {
+public class DeleteCommand extends Command {
+    public DeleteCommand(String message) {
         super(message);
     }
 

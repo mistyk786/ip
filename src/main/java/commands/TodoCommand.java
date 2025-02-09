@@ -6,8 +6,8 @@ import io.Ui;
 import tasks.Tasklist;
 
 
-public class todoCommand extends Command {
-    public todoCommand(String message) {
+public class TodoCommand extends Command {
+    public TodoCommand(String message) {
         super(message);
     }
 

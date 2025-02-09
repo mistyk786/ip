@@ -5,8 +5,8 @@ import io.EventParser;
 import tasks.Tasklist;
 import io.Ui;
 
-public class eventCommand extends Command {
-    public eventCommand(String message) {
+public class EventCommand extends Command {
+    public EventCommand(String message) {
         super(message);
     }
 
