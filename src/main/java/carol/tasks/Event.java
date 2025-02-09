@@ -1,5 +1,10 @@
+package carol.tasks;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+
+import static java.lang.System.out;
 
 public class Event extends Task {
     private String type;
@@ -18,8 +23,13 @@ public class Event extends Task {
     }
 
     @Override
+    public String toFileString() {
+        return String.format("%s | %s | %s %s | %s %s", type, super.toFileString(), this.eventDateStart, this.eventTimeStart, this.eventDateEnd, this.eventTimeEnd);
+    }
+
+    @Override
     public String toString() {
-        return String.format("%s | %s | %s %s | %s %s", type, super.toString(), this.eventDateStart, this.eventTimeStart, this.eventDateEnd, this.eventTimeEnd);
+        return String.format("[%s]%s from %s %s to %s %s", type, super.toString(), this.eventDateStart, this.eventTimeStart, this.eventDateEnd, this.eventTimeEnd);
     }
 }
 
