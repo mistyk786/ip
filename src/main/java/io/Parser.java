@@ -29,6 +29,8 @@ public class Parser {
             return new UnmarkCommand(message);
         case "delete":
             return new DeleteCommand(message);
+        case "find":
+            return new FindCommand(message);
         case "todo":
             return new TodoCommand(message);
         case "deadline":
