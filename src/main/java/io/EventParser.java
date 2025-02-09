@@ -106,7 +106,7 @@ public class EventParser {
         try {
             switch (taskType) {
             case "todo":
-                ToDo t = new ToDo(line);
+                ToDo t = new ToDo(line.toLowerCase());
                 tasks.addTask(t);
                 break;
             case "deadline":
@@ -118,7 +118,7 @@ public class EventParser {
                             """);
                 }
 
-                String deadlineDescription = parts[0].trim();
+                String deadlineDescription = parts[0].trim().toLowerCase();
                 String deadlineString = parts[1].trim();
                 LocalDate date = parseDate(deadlineString.split(" ")[0]);
                 LocalTime time = parseTime(deadlineString.split(" ")[1]);
@@ -135,7 +135,7 @@ public class EventParser {
                             """);
                 }
 
-                String eventDescription = parts2[0].trim();
+                String eventDescription = parts2[0].trim().toLowerCase();
                 String eventStartString = parts2[1].trim();
                 String eventEndString = parts2[2].trim();
 

@@ -9,7 +9,7 @@ public class Task {
         this.isDone = false;
     }
 
-    private String getDescription() { return description; }
+    public String getDescription() { return description; }
 
     public String getStatusIcon() {
         return (isDone ? "X" : " "); // mark done task with X
@@ -33,7 +33,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return String.format("[%s] %s", getStatusIcon(), description);
+        return String.format(" [%s] %s", getStatusIcon(), description);
     }
 }
 
