@@ -1,3 +1,3 @@
 T | O | borrow books
-D | O | return book | 2019-02-12 15:30
+D | X | return book | 2019-02-12 15:30
 D | O | return book | 2019-02-10 15:20
