@@ -3,8 +3,8 @@ package commands;
 import tasks.Tasklist;
 import io.Ui;
 
-public class listCommand extends Command {
-    public listCommand(String message) {
+public class ListCommand extends Command {
+    public ListCommand(String message) {
         super(message);
     }
 

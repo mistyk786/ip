@@ -6,8 +6,8 @@ import io.Ui;
 import tasks.Tasklist;
 
 
-public class deadlineCommand extends Command {
-    public deadlineCommand(String message) {
+public class DeadlineCommand extends Command {
+    public DeadlineCommand(String message) {
         super(message);
     }
 

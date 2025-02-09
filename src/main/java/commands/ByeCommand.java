@@ -3,8 +3,8 @@ package commands;
 import tasks.Tasklist;
 import io.Ui;
 
-public class byeCommand extends Command {
-    public byeCommand(String message) {
+public class ByeCommand extends Command {
+    public ByeCommand(String message) {
         super(message);
     }
 

@@ -4,8 +4,8 @@ import tasks.Tasklist;
 import tasks.Task;
 import io.Ui;
 
-public class unmarkCommand extends Command {
-    public unmarkCommand(String message) {
+public class UnmarkCommand extends Command {
+    public UnmarkCommand(String message) {
         super(message);
     }
 

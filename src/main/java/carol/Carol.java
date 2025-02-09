@@ -13,6 +13,10 @@ public class Carol {
     protected Ui ui;
     protected Parser parser;
 
+    /**
+     * Creates chatbot and retrieves tasks from storage
+     * @param filePath Storage location
+     */
     public Carol(String filePath) {
         ui = new Ui();
         parser = new Parser();
@@ -24,7 +28,12 @@ public class Carol {
             tasks = new Tasklist();
         }
     }
-
+    /**
+     * Runs chatbot
+     * Continues running unless execute(tasks) returns false, which
+     * only occurs if users input 'bye'
+     * Saves tasks into storage after each input
+     */
     public void run() {
         ui.showIntro();
         boolean running = true;
@@ -34,10 +43,9 @@ public class Carol {
                 Ui.line();
                 Command c = parser.parseCommand(input);
                 running = c.execute(tasks);
+                storage.saveTasks();
             } catch (CarolException | IOException e) {
                 Ui.showError(e.getMessage());
-            } finally {
-                storage.saveTasks();
             }
         }
     }

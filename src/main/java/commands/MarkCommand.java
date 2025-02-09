@@ -4,8 +4,8 @@ import tasks.Tasklist;
 import tasks.Task;
 import io.Ui;
 
-public class markCommand extends Command {
-    public markCommand(String message) {
+public class MarkCommand extends Command {
+    public MarkCommand(String message) {
         super(message);
     }
 
