@@ -1,6 +1,7 @@
-package carol.commands;
-import carol.tasks.Tasklist;
-import carol.io.Ui;
+package commands;
+
+import tasks.Tasklist;
+import io.Ui;
 
 public class listCommand extends Command {
     public listCommand(String message) {

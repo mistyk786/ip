@@ -1,11 +1,11 @@
-package carol.commands;
+package commands;
 
-import carol.tasks.Tasklist;
-import carol.io.Ui;
-import carol.tasks.Task;
+import tasks.Tasklist;
+import tasks.Task;
+import io.Ui;
 
-public class unmarkCommand extends Command {
-    public unmarkCommand(String message) {
+public class markCommand extends Command {
+    public markCommand(String message) {
         super(message);
     }
 
@@ -13,8 +13,8 @@ public class unmarkCommand extends Command {
     public boolean execute(Tasklist tasks) {
         if (!(message.length() == 1)) {
             Ui.showError(String.format("""
-                    Your input was: unmark %s
-                    Expected input: unmark [number]
+                    Your input was: mark %s
+                    Expected input: mark [number]
                     """, message));
             return true;
         }
@@ -23,21 +23,20 @@ public class unmarkCommand extends Command {
             i = Integer.parseInt(message) - 1;
         } catch (NumberFormatException e) {
             Ui.showError(String.format("""
-                    Your input was: unmark %s
-                    Expected input: unmark [number]
+                    Your input was: mark %s
+                    Expected input: mark [number]
                     """, message));
             return true;
         }
         if (i < 0 || i > tasks.size() - 1) {
             Ui.showError(String.format("""
-                    Your input was: unmark %s
-                    Expected input: unmark [number]
+                    Your input was: mark %s
+                    Expected input: mark [number]
                     """, message));
             return true;
         }
         Task t = tasks.getTask(i);
-        t.markAsUndone();
+        t.markAsDone();
         return true;
     }
 }
-

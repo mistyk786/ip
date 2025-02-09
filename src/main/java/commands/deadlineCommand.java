@@ -1,8 +1,10 @@
-package carol.commands;
+package commands;
+
 import carol.CarolException;
-import carol.io.EventParser;
-import carol.tasks.Tasklist;
-import carol.io.Ui;
+import io.EventParser;
+import io.Ui;
+import tasks.Tasklist;
+
 
 public class deadlineCommand extends Command {
     public deadlineCommand(String message) {

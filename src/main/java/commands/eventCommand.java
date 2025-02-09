@@ -1,8 +1,9 @@
-package carol.commands;
+package commands;
+
 import carol.CarolException;
-import carol.io.EventParser;
-import carol.tasks.Tasklist;
-import carol.io.Ui;
+import io.EventParser;
+import tasks.Tasklist;
+import io.Ui;
 
 public class eventCommand extends Command {
     public eventCommand(String message) {

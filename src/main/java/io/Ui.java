@@ -1,4 +1,4 @@
-package carol.io;
+package io;
 
 import java.io.BufferedReader;
 import java.io.IOException;

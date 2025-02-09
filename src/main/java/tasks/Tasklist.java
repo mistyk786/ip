@@ -1,4 +1,4 @@
-package carol.tasks;
+package tasks;
 
 import java.util.ArrayList;
 

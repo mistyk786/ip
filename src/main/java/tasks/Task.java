@@ -1,10 +1,4 @@
-package carol.tasks;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
-import java.io.IOException;
-import carol.CarolException;
+package tasks;
 
 public class Task {
     private String description;
@@ -14,6 +8,8 @@ public class Task {
         this.description = description;
         this.isDone = false;
     }
+
+    private String getDescription() { return description; }
 
     public String getStatusIcon() {
         return (isDone ? "X" : " "); // mark done task with X

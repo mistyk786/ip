@@ -1,10 +1,7 @@
-package carol.tasks;
+package tasks;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
-
-import static java.lang.System.out;
 
 public class Event extends Task {
     private String type;
@@ -21,6 +18,11 @@ public class Event extends Task {
         this.eventTimeStart = eventTimeStart;
         this.eventTimeEnd = eventTimeEnd;
     }
+
+    private LocalDate getEventDateStart() { return eventDateStart; }
+    private LocalDate getEventDateEnd() { return eventDateEnd; }
+    private LocalTime getEventTimeStart() { return eventTimeStart; }
+    private LocalTime getEventTimeEnd() { return eventTimeEnd; }
 
     @Override
     public String toFileString() {

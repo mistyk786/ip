@@ -1,9 +1,10 @@
 package carol;
 
-import carol.commands.Command;
-import carol.io.*;
-import carol.tasks.Tasklist;
-
+import commands.Command;
+import tasks.Tasklist;
+import io.Storage;
+import io.Ui;
+import io.Parser;
 import java.io.IOException;
 
 public class Carol {

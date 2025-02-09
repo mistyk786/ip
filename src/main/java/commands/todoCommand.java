@@ -1,9 +1,9 @@
-package carol.commands;
+package commands;
 
 import carol.CarolException;
-import carol.io.EventParser;
-import carol.io.Ui;
-import carol.tasks.Tasklist;
+import io.EventParser;
+import io.Ui;
+import tasks.Tasklist;
 
 
 public class todoCommand extends Command {

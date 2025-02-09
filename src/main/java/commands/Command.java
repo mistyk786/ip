@@ -1,7 +1,7 @@
-package carol.commands;
+package commands;
 
 import carol.CarolException;
-import carol.tasks.Tasklist;
+import tasks.Tasklist;
 
 abstract public class Command {
     protected String message;

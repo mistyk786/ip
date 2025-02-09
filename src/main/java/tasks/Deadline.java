@@ -1,4 +1,4 @@
-package carol.tasks;
+package tasks;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,6 +14,9 @@ public class Deadline extends Task {
         this.deadlineDate = deadlineDate;
         this.deadlineTime = deadlineTime;
     }
+
+    private LocalDate getDeadlineDate() { return deadlineDate; }
+    private LocalTime getDeadlineTime() { return deadlineTime; }
 
     @Override
     public String toFileString() {

@@ -1,12 +1,7 @@
-package carol.io;
+package io;
 
 import carol.CarolException;
-import carol.commands.*;
-import carol.tasks.*;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
+import commands.*;
 
 public class Parser {
     public Command parseCommand(String input) throws CarolException {

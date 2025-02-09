@@ -1,6 +1,4 @@
-package carol.tasks;
-
-import carol.io.Ui;
+package tasks;
 
 public class ToDo extends Task{
     private String type;

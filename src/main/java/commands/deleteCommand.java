@@ -1,7 +1,7 @@
-package carol.commands;
+package commands;
 
-import carol.tasks.Tasklist;
-import carol.io.Ui;
+import tasks.Tasklist;
+import io.Ui;
 
 public class deleteCommand extends Command {
     public deleteCommand(String message) {
