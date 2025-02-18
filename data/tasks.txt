@@ -1,3 +1,4 @@
-T | X | borrow books
-T | X | borrow other book
-T | X | foefsd fdsf
+T |   | borrow books
+T |   | borrow other book
+T |   | foefsd fdsf
+T |   | borrow books

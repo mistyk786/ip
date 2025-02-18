@@ -44,8 +44,8 @@ public class Carol {
                 Command c = parser.parseCommand(input);
                 running = c.execute(tasks);
                 storage.saveTasks();
-            } catch (CarolException | IOException e) {
-                Ui.showError(e.getMessage());
+            } catch (IOException | CarolException i) {
+                Ui.showError(i.getMessage());
             }
         }
     }
