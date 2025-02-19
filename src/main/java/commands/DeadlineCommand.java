@@ -19,7 +19,6 @@ public class DeadlineCommand extends Command {
                     Expected input: deadline [action]
                     """);
         }
-        String output = EventParser.parseTask(message, "deadline", tasks);
-        return output;
+        return EventParser.parseTask(message, "deadline", tasks);
     }
 }

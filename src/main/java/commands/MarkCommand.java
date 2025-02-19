@@ -12,28 +12,8 @@ public class MarkCommand extends Command {
 
     @Override
     public String execute(Tasklist tasks) throws CortanaException {
-        if (!(message.length() == 1)) {
-            return Ui.showError(String.format("""
-                    Your input was: mark %s
-                    Expected input: mark [number]
-                    """, message));
-        }
-        
-        int i;
-        try {
-            i = Integer.parseInt(message) - 1;
-        } catch (NumberFormatException e) {
-            return Ui.showError(String.format("""
-                    Your input was: mark %s
-                    Expected input: mark [number]
-                    """, message));
-        }
-        if (i < 0 || i > tasks.size() - 1) {
-            return Ui.showError(String.format("""
-                    Your input was: mark %s
-                    Expected input: mark [number]
-                    """, message));
-        }
+        int size = tasks.size();
+        int i = getIndex(message, size);
         Task t = tasks.getTask(i);
         t.markAsDone();
         return Ui.print(String.format("Task completed: %s", t.toString()));
