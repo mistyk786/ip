@@ -12,7 +12,7 @@ public class FindCommand extends Command {
     @Override
     public String execute(Tasklist tasks) {
         StringBuilder sb = new StringBuilder();
-        boolean found = false;
+        boolean exists = false;
         sb.append("""
                 Here are the matching tasks in your list:
                 
@@ -20,16 +20,15 @@ public class FindCommand extends Command {
 
         for (Task t : tasks.getList()) {
             String description = t.getDescription();
-            if (description.contains(message.toLowerCase())) {
-                found = true;
+            if (description.contains(message)) {
+                exists = true;
                 sb.append(t.toString()).append("\n");
             }
         }
 
-        if (found) {
-            return Ui.print(sb.toString());
-        } else {
+        if (!exists) {
             return Ui.showError("No matching tasks found.");
         }
+        return Ui.print(sb.toString());
     }
 }

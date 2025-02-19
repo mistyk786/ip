@@ -27,6 +27,56 @@ public class EventParser {
 
     };
 
+
+    /**
+     * Parses string for date
+     * @param dateStr;
+     * @return Date that is stored in Task
+     * @throws DateTimeParseException Input does not match date formats
+     */
+    private static String parseDate(String dateStr) throws DateTimeParseException {
+        for (DateTimeFormatter format : DATE_FORMATS) {
+            try {
+                LocalDate date = LocalDate.parse(dateStr, format);
+                return date.format(DATE_FORMATS[1]);
+            } catch (DateTimeParseException ignored) {
+            }
+        }
+        throw new DateTimeParseException(
+                """
+                        Invalid date format. Please use one of the following:
+                        - Date Formats: YYYY-MM-DD, DD-MM-YYYY, DD/MM/YYY (e.g., 2025-12-19, 19-12-2025, 19/12/2025)
+                        """,
+                dateStr,
+                0
+        );
+
+    }
+
+    /**
+     * Parses string for time
+     * @param timeStr;
+     * @return Time that is stored in Task
+     * @throws DateTimeParseException Input does not match time formats
+     */
+    private static String parseTime(String timeStr) throws DateTimeParseException {
+        for (DateTimeFormatter format : TIME_FORMATS) {
+            try {
+                LocalTime time = LocalTime.parse(timeStr, format);
+                return time.format(TIME_FORMATS[1]);
+            } catch (DateTimeParseException ignored) {
+            }
+        }
+        throw new DateTimeParseException(
+                """
+                        Invalid time format. Please use one of the following:
+                        - Time Formats: HH:mm (24-hour), hh:mm a (12-hour) (e.g., 17:30, 05:30 PM)
+                        """,
+                timeStr,
+                0
+        );
+    }
+
     /**
      * Parses tasks from file
      * @param line Task strings that is stored in storage
@@ -201,56 +251,5 @@ public class EventParser {
             return Ui.showError(e.getMessage());
         }
         return output;
-    }
-
-    /**
-     * Parses string for date
-     * @param dateStr;
-     * @return Date that is stored in Task
-     * @throws DateTimeParseException Input does not match date formats
-     */
-    private static String parseDate(String dateStr) throws DateTimeParseException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        for (DateTimeFormatter format : DATE_FORMATS) {
-            try {
-                LocalDate date = LocalDate.parse(dateStr, format);
-                return date.format(formatter);
-            } catch (DateTimeParseException ignored) {
-            }
-        }
-        throw new DateTimeParseException(
-                """
-                        Invalid date format. Please use one of the following:
-                        - Date Formats: YYYY-MM-DD, DD-MM-YYYY, DD/MM/YYY (e.g., 2025-12-19, 19-12-2025, 19/12/2025)
-                        """,
-                dateStr,
-                0
-        );
-
-    }
-
-    /**
-     * Parses string for time
-     * @param timeStr;
-     * @return Time that is stored in Task
-     * @throws DateTimeParseException Input does not match time formats
-     */
-    private static String parseTime(String timeStr) throws DateTimeParseException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
-        for (DateTimeFormatter format : TIME_FORMATS) {
-            try {
-                 LocalTime time = LocalTime.parse(timeStr, format);
-                 return time.format(formatter);
-            } catch (DateTimeParseException ignored) {
-            }
-        }
-        throw new DateTimeParseException(
-                """
-                        Invalid time format. Please use one of the following:
-                        - Time Formats: HH:mm (24-hour), hh:mm a (12-hour) (e.g., 17:30, 05:30 PM)
-                        """,
-                timeStr,
-                0
-        );
     }
 }

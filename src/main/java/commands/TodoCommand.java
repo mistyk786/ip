@@ -19,8 +19,7 @@ public class TodoCommand extends Command {
                     Expected input: todo [action]
                     """);
         }
-        String output = EventParser.parseTask(message, "todo", tasks);
-        return output;
+        return EventParser.parseTask(message, "todo", tasks);
     }
 }
 

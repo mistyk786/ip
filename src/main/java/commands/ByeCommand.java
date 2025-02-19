@@ -11,15 +11,13 @@ public class ByeCommand extends Command {
 
     @Override
     public String execute(Tasklist tasks) {
-        if (message.isEmpty()) {
-            return Ui.showEnd();
-        }
-        else {
+        if (!message.isEmpty()) {
             return Ui.showError(String.format("""
                 Your input was: bye %s
                 Expected input: bye
                 """, message));
         }
+        return Ui.showEnd();
     }
 }
 

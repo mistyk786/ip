@@ -18,7 +18,6 @@ public class EventCommand extends Command {
                         Expected input: event [action]
                         """);
         }
-        String output = EventParser.parseTask(message, "event", tasks);
-        return output;
+        return EventParser.parseTask(message, "event", tasks);
     }
 }
