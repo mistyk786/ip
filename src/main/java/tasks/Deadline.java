@@ -5,18 +5,15 @@ import java.time.LocalTime;
 
 public class Deadline extends Task {
     private String type;
-    private LocalDate deadlineDate;
-    private LocalTime deadlineTime;
+    private String deadlineDate;
+    private String deadlineTime;
 
-    public Deadline(String description, LocalDate deadlineDate, LocalTime deadlineTime) {
+    public Deadline(String description, String deadlineDate, String deadlineTime) {
         super(description);
         this.type = "D";
         this.deadlineDate = deadlineDate;
         this.deadlineTime = deadlineTime;
     }
-
-    private LocalDate getDeadlineDate() { return deadlineDate; }
-    private LocalTime getDeadlineTime() { return deadlineTime; }
 
     @Override
     public String toFileString() {

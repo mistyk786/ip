@@ -20,6 +20,6 @@ public class DeadlineCommand extends Command {
                     """);
         }
         String output = EventParser.parseTask(message, "deadline", tasks);
-        return Ui.print("Added task:\n%s".formatted(message));
+        return output;
     }
 }

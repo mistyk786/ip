@@ -12,19 +12,20 @@ public class Task {
     public String getDescription() { return description; }
 
     public String getStatusIcon() {
-        return (isDone ? "X" : " "); // mark done task with X
+        if (isDone) {
+            return "X";
+        }
+        else {
+            return " ";
+        }
     }
 
     public void markAsDone() {
-        if (!isDone) {
-            isDone = true;
-        }
+        isDone = true;
     }
 
     public void markAsUndone() {
-        if (isDone) {
-            isDone = false;
-        }
+        isDone = false;
     }
 
     public String toFileString() {

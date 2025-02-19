@@ -5,12 +5,12 @@ import java.time.LocalTime;
 
 public class Event extends Task {
     private String type;
-    private LocalDate eventDateStart;
-    private LocalDate eventDateEnd;
-    private LocalTime eventTimeStart;
-    private LocalTime eventTimeEnd;
+    private String eventDateStart;
+    private String eventDateEnd;
+    private String eventTimeStart;
+    private String eventTimeEnd;
 
-    public Event(String description, LocalDate eventDateStart, LocalDate eventDateEnd, LocalTime eventTimeStart, LocalTime eventTimeEnd) {
+    public Event(String description, String eventDateStart, String eventDateEnd, String eventTimeStart, String eventTimeEnd) {
         super(description);
         this.type = "E";
         this.eventDateStart = eventDateStart;
@@ -18,11 +18,6 @@ public class Event extends Task {
         this.eventTimeStart = eventTimeStart;
         this.eventTimeEnd = eventTimeEnd;
     }
-
-    private LocalDate getEventDateStart() { return eventDateStart; }
-    private LocalDate getEventDateEnd() { return eventDateEnd; }
-    private LocalTime getEventTimeStart() { return eventTimeStart; }
-    private LocalTime getEventTimeEnd() { return eventTimeEnd; }
 
     @Override
     public String toFileString() {

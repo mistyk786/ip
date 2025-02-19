@@ -20,7 +20,7 @@ public class TodoCommand extends Command {
                     """);
         }
         String output = EventParser.parseTask(message, "todo", tasks);
-        return Ui.print("Added task:\n%s".formatted(message));
+        return output;
     }
 }
 

@@ -19,6 +19,6 @@ public class EventCommand extends Command {
                         """);
         }
         String output = EventParser.parseTask(message, "event", tasks);
-        return Ui.print("Added task:\n%s".formatted(message));
+        return output;
     }
 }
