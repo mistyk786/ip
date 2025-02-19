@@ -1,6 +1,6 @@
 package io;
 
-import carol.CarolException;
+import cortana.CortanaException;
 import tasks.Task;
 import tasks.Tasklist;
 import tasks.ToDo;
@@ -30,14 +30,14 @@ public class EventParser {
      * Parses tasks from file
      * @param line Task strings that is stored in storage
      * @return Task stored in Tasklist
-     * @throws CarolException Storage contains incorrect Date/Time formats
+     * @throws CortanaException Storage contains incorrect Date/Time formats
      * or other incorrect fields
      */
-    public static Task parseTaskFromFile(String line) throws CarolException {
+    public static Task parseTaskFromFile(String line) throws CortanaException {
         String[] parts = line.split(" \\| ");
 
         if (parts.length < 3) {
-            throw new CarolException("Invalid task format: Missing essential fields. \n");
+            throw new CortanaException("Invalid task format: Missing essential fields. \n");
         }
 
         String taskType = parts[0];
@@ -45,7 +45,7 @@ public class EventParser {
         String description = parts[2];
 
         if (!isDoneStr.equals(" ") && !isDoneStr.equals("X")) {
-            throw new CarolException("Invalid task format: Unrecognized essential field: " + isDoneStr + "\n");
+            throw new CortanaException("Invalid task format: Unrecognized essential field: " + isDoneStr + "\n");
         }
         boolean isDone = isDoneStr.equals(" ");
 
@@ -59,7 +59,7 @@ public class EventParser {
                 return todo;
             case "D":
                 if (parts.length < 4) {
-                    throw new CarolException("Invalid Deadline format: Missing date/time.");
+                    throw new CortanaException("Invalid Deadline format: Missing date/time.");
                 }
 
                 String deadlineString = parts[3];
@@ -72,7 +72,7 @@ public class EventParser {
                 return deadline;
             case "E":
                 if (parts.length < 5) {
-                    throw new CarolException("Invalid Event format: Missing start or end date/time.");
+                    throw new CortanaException("Invalid Event format: Missing start or end date/time.");
                 }
                 String[] eventStartParts = parts[3].split(" ");
                 String[] eventEndParts = parts[4].split(" ");
@@ -87,10 +87,10 @@ public class EventParser {
                 }
                 return event;
             default:
-                throw new CarolException("Unknown task type: " + taskType);
+                throw new CortanaException("Unknown task type: " + taskType);
             }
         } catch (DateTimeParseException e) {
-            throw new CarolException(e.getMessage());
+            throw new CortanaException(e.getMessage());
         }
     }
 
@@ -99,20 +99,22 @@ public class EventParser {
      * @param line Task message
      * @param taskType Todo, Deadline and Event
      * @param tasks Tasklist
-     * @throws CarolException Input contains incorrect Date/Time formats
+     * @throws CortanaException Input contains incorrect Date/Time formats
      * or other incorrect fields
      */
-    public static void parseTask(String line, String taskType, Tasklist tasks) throws CarolException {
+    public static String parseTask(String line, String taskType, Tasklist tasks) throws CortanaException {
+        String output;
         try {
             switch (taskType) {
             case "todo":
-                ToDo t = new ToDo(line.toLowerCase());
-                tasks.addTask(t);
+                ToDo todo = new ToDo(line.toLowerCase());
+                tasks.addTask(todo);
+                output =  Ui.print("Task added: " + todo.toString());
                 break;
             case "deadline":
                 String[] parts = line.split(" /by ", 2);
                 if (parts.length != 2) {
-                    throw new CarolException("""
+                    throw new CortanaException("""
                             Invalid task format: Missing date/time
                             Use following format for deadlines: deadline [message] /by [date][time]
                             """);
@@ -125,11 +127,12 @@ public class EventParser {
 
                 Deadline deadline = new Deadline(deadlineDescription, date, time);
                 tasks.addTask(deadline);
+                output = Ui.print("Task added: " + deadline.toString());
                 break;
             case "event":
                 String[] parts2 = line.split(" /from | /to ");
                 if (parts2.length != 3) {
-                    throw new CarolException("""
+                    throw new CortanaException("""
                             Invalid task format: Missing date/time
                             Use following format for events: event [message] /from [date][time] /to [date][time]
                             """);
@@ -146,13 +149,15 @@ public class EventParser {
 
                 Event event = new Event(eventDescription, startDate, endDate, startTime, endTime);
                 tasks.addTask(event);
+                output = Ui.print("Task added: " + event.toString());
                 break;
             default:
-                throw new CarolException("Unknown task type: " + taskType);
+                throw new CortanaException("Unknown task type: " + taskType);
             }
         } catch (DateTimeParseException e) {
-            Ui.showError(e.getMessage());
+            return Ui.showError(e.getMessage());
         }
+        return output;
     }
 
     /**

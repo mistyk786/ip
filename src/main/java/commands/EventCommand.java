@@ -1,6 +1,6 @@
 package commands;
 
-import carol.CarolException;
+import cortana.CortanaException;
 import io.EventParser;
 import tasks.Tasklist;
 import io.Ui;
@@ -11,15 +11,14 @@ public class EventCommand extends Command {
     }
 
     @Override
-    public boolean execute(Tasklist tasks) throws CarolException {
+    public String execute(Tasklist tasks) throws CortanaException {
         if (message == null || message.trim().isEmpty()) {
-            Ui.showError("""
+            return Ui.showError("""
                         Your input was: event
                         Expected input: event [action]
                         """);
-            return true;
         }
-        EventParser.parseTask(message, "event", tasks);
-        return true;
+        String output = EventParser.parseTask(message, "event", tasks);
+        return Ui.print("Added task:\n%s".formatted(message));
     }
 }

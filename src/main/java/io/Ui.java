@@ -6,11 +6,14 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class Ui {
-    protected final String INTRO_MSG = """
-             Hello! I'm Carol, your personal assistant.
-             What can I do for you?
+    protected static final String INTRO_MSG = """
+             Greetings, Spartan. I am Cortana, your AI assistant.
+             What mission can I assist you with today?
             """;
-    protected final String END_MSG = " Bye! Hope to hear from you soon!\n";
+
+    protected static final String END_MSG = """
+             Goodbye, Chief. See you soon.
+            """;
 
     /**
      * Reads line from user
@@ -29,44 +32,39 @@ public class Ui {
     /**
      * Shows lined intro message
      */
-    public void showIntro() {
-        line();
-        System.out.print(INTRO_MSG);
-        line();
+    public static String showIntro() {
+        return line() + INTRO_MSG + line();
     }
 
     /**
      * Shows lined end message
      */
-    public void showEnd() {
-        System.out.print(END_MSG);
-        line();
+    public static String showEnd() {
+        return line() + END_MSG + line();
     }
 
     /**
      * Shows lined error message
      * @param message Adds message to error
      */
-    public static void showError(String message) {
-        System.out.print("Error: \n"
-                + message);
-        line();
+    public static String showError(String message) {
+        return line() + "Caution, Spartan:\n" + message + "\n" + line();
     }
 
     /**
      * Prints message to user
      * @param message User message
      */
-    public static void print(String message) {
-        System.out.println(message);
+    public static String print(String message) {
+        return line() + message + "\n" + line();
     }
 
     /**
      * Prints line for user
      * Increases readability
      */
-    public static void line() {
-        System.out.println("⸺".repeat(80));
+    public static String line() {
+        return "⸺".repeat(10) + "\n";
     }
 
 }

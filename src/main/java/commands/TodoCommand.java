@@ -1,6 +1,6 @@
 package commands;
 
-import carol.CarolException;
+import cortana.CortanaException;
 import io.EventParser;
 import io.Ui;
 import tasks.Tasklist;
@@ -12,16 +12,15 @@ public class TodoCommand extends Command {
     }
 
     @Override
-    public boolean execute(Tasklist tasks) throws CarolException {
+    public String execute(Tasklist tasks) throws CortanaException {
         if (message == null || message.trim().isEmpty()) {
-            Ui.showError("""
+            return Ui.showError("""
                     Your input was: todo
                     Expected input: todo [action]
                     """);
-            return true;
         }
-        EventParser.parseTask(message, "todo", tasks);
-        return true;
+        String output = EventParser.parseTask(message, "todo", tasks);
+        return Ui.print("Added task:\n%s".formatted(message));
     }
 }
 

@@ -1,6 +1,6 @@
 package io;
 
-import carol.CarolException;
+import cortana.CortanaException;
 import commands.*;
 
 public class Parser {
@@ -8,12 +8,12 @@ public class Parser {
      * Parses user input for command to be executed
      * @param input String that was inputted by the user
      * @return Command that is executed by respective Command classes
-     * @throws CarolException Input that does not contain any command
+     * @throws CortanaException Input that does not contain any command
      */
-    public Command parseCommand(String input) throws CarolException {
+    public Command parseCommand(String input) throws CortanaException {
         input = input.trim();
         if (input.isEmpty()) {
-            Ui.showError("Empty command.");
+            throw new CortanaException("Empty command.");
         }
         String[] parts = input.split(" ", 2);
         String action = parts[0];
@@ -38,7 +38,7 @@ public class Parser {
         case "event":
             return new EventCommand(message);
         default:
-            throw new CarolException("Invalid command.\n");
+            throw new CortanaException("Invalid command.\n");
         }
     }
 }

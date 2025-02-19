@@ -1,6 +1,6 @@
 package io;
 
-import carol.CarolException;
+import cortana.CortanaException;
 import tasks.Task;
 import tasks.Tasklist;
 
@@ -25,14 +25,14 @@ public class Storage {
     /**
      * Converts Strings from Storage into tasks that are stored as Tasks in a Tasklist
      * @return Tasklist
-     * @throws CarolException File is not found || Error in reading data from file
+     * @throws CortanaException File is not found || Error in reading data from file
      */
-    public Tasklist loadTasks() throws CarolException {
+    public Tasklist loadTasks() throws CortanaException {
         String directoryPath = new File(filePath).getParent();
         File dir = new File(directoryPath);
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
-                throw new CarolException("Failed to create data directory.");
+                throw new CortanaException("Failed to create data directory.");
             }
         }
 
@@ -41,7 +41,7 @@ public class Storage {
             try {
                 dataFile.createNewFile();
             } catch (IOException e) {
-                throw new CarolException("Error creating data file: " + e.getMessage());
+                throw new CortanaException("Error creating data file: " + e.getMessage());
             }
         }
 
@@ -53,25 +53,25 @@ public class Storage {
                 list.addTask(t);
             }
         } catch (FileNotFoundException e) {
-            throw new CarolException("Data file not found, even after creation.");
+            throw new CortanaException("Data file not found, even after creation.");
         } catch (IOException e) {
-            throw new CarolException("Error reading data file: " + e.getMessage());
+            throw new CortanaException("Error reading data file: " + e.getMessage());
         }
         return list;
     }
 
     /**
      * Converts Tasks from Tasklist back to Strings in Storage
-     * @throws CarolException Error in saving tasks
+     * @throws CortanaException Error in saving tasks
      */
-    public void saveTasks() throws CarolException {
+    public void saveTasks() throws CortanaException {
         File file = new File(filePath);
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             for (Task t : list.getList()) {
                 bw.write(t.toFileString() + "\n");
             }
         } catch (IOException i) {
-            throw new CarolException("Error saving data tasks: " + i.getMessage());
+            throw new CortanaException("Error saving data tasks: " + i.getMessage());
         }
     }
 }

@@ -9,23 +9,23 @@ public class ListCommand extends Command {
     }
 
     @Override
-    public boolean execute(Tasklist tasks) {
+    public String execute(Tasklist tasks) {
+        StringBuilder sb = new StringBuilder();
         if (!message.isEmpty()) {
-            Ui.showError(String.format("""
+            return Ui.showError(String.format("""
                     Your input was: list %s
                     Expected input: list
                     """, message));
-            return true;
         }
         if (tasks.isEmpty()) {
-            Ui.showError(" Your list is empty!\n");
-            return true;
+            return Ui.showError(" Your list is empty!");
+        } else if (!tasks.isEmpty()) {
+            sb.append("Here are the tasks in your list:\n\n");
+            sb.append(tasks.toString());
+            return Ui.print(sb.toString());
+        } else {
+            return Ui.showError(" Unknown error.");
         }
-        String sb = "Here are the tasks in your list:\n\n" +
-                tasks.toString();
-        Ui.print(sb);
-        Ui.line();
-        return true;
     }
 }
 
