@@ -1,5 +1,6 @@
 package commands;
 
+import cortana.CortanaException;
 import tasks.Tasklist;
 import io.Ui;
 
@@ -9,15 +10,16 @@ public class ByeCommand extends Command {
     }
 
     @Override
-    public boolean execute(Tasklist tasks) {
+    public String execute(Tasklist tasks) {
         if (message.isEmpty()) {
-            return false;
+            return Ui.showEnd();
         }
-        Ui.showError(String.format("""
+        else {
+            return Ui.showError(String.format("""
                 Your input was: bye %s
                 Expected input: bye
                 """, message));
-        return true;
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 package commands;
 
-import carol.CarolException;
+import cortana.CortanaException;
 import tasks.Tasklist;
 
 abstract public class Command {
@@ -8,5 +8,5 @@ abstract public class Command {
     public Command(String message) {
         this.message = message.trim();
     }
-    public abstract boolean execute(Tasklist tasks) throws CarolException;
+    public abstract String execute(Tasklist tasks) throws CortanaException;
 }

@@ -40,11 +40,11 @@ test {
 }
 
 application {
-    mainClass.set("carol.Carol")
+    mainClass.set("cortana.Launcher")
 }
 
 shadowJar {
-    archiveBaseName = "Carol"
+    archiveBaseName = "Cortana"
     archiveClassifier = null
 }
 

@@ -10,13 +10,14 @@ public class FindCommand extends Command {
     }
 
     @Override
-    public boolean execute(Tasklist tasks) {
+    public String execute(Tasklist tasks) {
         StringBuilder sb = new StringBuilder();
         boolean found = false;
         sb.append("""
                 Here are the matching tasks in your list:
                 
                 """);
+
         for (Task t : tasks.getList()) {
             String description = t.getDescription();
             if (description.contains(message.toLowerCase())) {
@@ -24,13 +25,11 @@ public class FindCommand extends Command {
                 sb.append(t.toString()).append("\n");
             }
         }
+
         if (found) {
-            Ui.print(sb.toString());
-            Ui.line();
+            return Ui.print(sb.toString());
         } else {
-            Ui.print("No matching tasks found.");
-            Ui.line();
+            return Ui.showError("No matching tasks found.");
         }
-        return true;
     }
 }
