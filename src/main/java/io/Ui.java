@@ -15,6 +15,32 @@ public class Ui {
              Goodbye, Chief. See you soon.
             """;
 
+    protected static final String HELP_MSG = """
+        Here are your mission directives, Spartan:
+        
+           Task Management
+        -  todo [description] → Adds a To-Do task.
+        -  deadline [description] /by [YYYY-MM-DD HH:mm] → Adds a Deadline task.
+        -  event [description] /from [YYYY-MM-DD HH:mm] /to [YYYY-MM-DD HH:mm] → Adds an Event task.
+        -  list → Displays all tasks.
+        -  mark [task number] → Marks a task as done.
+        -  unmark [task number] → Unmarks a task.
+        -  delete [task number] → Deletes a task.
+        -  find [keyword] → Searches for tasks containing the keyword.
+
+           Settings & Utility**
+        -  help → Displays this command list.
+        -  bye → Exits the program.
+        
+        ️  Example Commands
+        -  todo Finish Halo Campaign
+        -  deadline Submit Report /by 2024-02-20 23:59
+        -  event UNSC Briefing /from 2024-02-21 14:00 /to 2024-02-21 16:00
+        -  mark 2
+        -  delete 3
+        -  find Halo
+        """;
+
     /**
      * Reads line from user
      * @return input from user that is parsed by Parser
@@ -48,7 +74,14 @@ public class Ui {
      * @param message Adds message to error
      */
     public static String showError(String message) {
-        return line() + "Caution, Spartan:\n" + message + "\n" + line();
+        return line() + "Caution, Spartan:\n" + message + "\nType help for more details\n" + line();
+    }
+
+    /**
+     * Shows lined help message
+     */
+    public static String showHelpMessage() {
+        return line() + HELP_MSG + line();
     }
 
     /**
