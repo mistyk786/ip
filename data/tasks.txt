@@ -1,6 +1,2 @@
-T |   | borrow books
-T |   | finish chatbot
-D |   | finish chatbot | 19-12-2025 11:30 am
-D |   | finish branches | 19-12-2025 11:59 am
-D |   | revise presentation | 20-12-2025 11:30 am
-D |   | enjoy weekend | 22-02-2025 09:00 am
+D |   | finish mission | 20/12/2025 06:30 pm
+E |   | YES | 20/12/2025 06:30 pm | 20/12/2025 06:45 pm

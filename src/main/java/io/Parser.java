@@ -31,6 +31,8 @@ public class Parser {
             return new DeleteCommand(message);
         case "find":
             return new FindCommand(message);
+        case "reminder":
+            return new ReminderCommand(message);
         case "todo":
             return new TodoCommand(message);
         case "deadline":

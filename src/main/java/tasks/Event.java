@@ -4,15 +4,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Event extends Task {
-    private String type;
-    private String eventDateStart;
-    private String eventDateEnd;
-    private String eventTimeStart;
-    private String eventTimeEnd;
+    private LocalDate eventDateStart;
+    private LocalDate eventDateEnd;
+    private LocalTime eventTimeStart;
+    private LocalTime eventTimeEnd;
 
-    public Event(String description, String eventDateStart, String eventDateEnd, String eventTimeStart, String eventTimeEnd) {
-        super(description);
-        this.type = "E";
+    public Event(String description, LocalDate eventDateStart, LocalDate eventDateEnd, LocalTime eventTimeStart, LocalTime eventTimeEnd) {
+        super(description, "E");
         this.eventDateStart = eventDateStart;
         this.eventDateEnd = eventDateEnd;
         this.eventTimeStart = eventTimeStart;
@@ -20,13 +18,27 @@ public class Event extends Task {
     }
 
     @Override
+    public LocalDate getDate() {
+        return eventDateEnd;
+    }
+
+    @Override
+    public LocalTime getTime() {
+        return eventTimeEnd;
+    }
+
+    @Override
     public String toFileString() {
-        return String.format("%s | %s | %s %s | %s %s", type, super.toFileString(), this.eventDateStart, this.eventTimeStart, this.eventDateEnd, this.eventTimeEnd);
+        return String.format("%s | %s %s | %s %s", super.toFileString(),
+                getDateString(eventDateStart), getTimeString(eventTimeStart),
+                getDateString(eventDateEnd), getTimeString(eventTimeEnd));
     }
 
     @Override
     public String toString() {
-        return String.format("[%s]%s (from: %s %s)(to: %s %s)", type, super.toString(), this.eventDateStart, this.eventTimeStart, this.eventDateEnd, this.eventTimeEnd);
+        return String.format("%s (from: %s %s)(to: %s %s)", super.toString(),
+                getDateString(eventDateStart), getTimeString(eventTimeStart),
+                getDateString(eventDateEnd), getTimeString(eventTimeEnd));
     }
 }
 

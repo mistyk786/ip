@@ -14,9 +14,10 @@ public class FindCommand extends Command {
         StringBuilder sb = new StringBuilder();
         boolean exists = false;
         sb.append("""
-                Here are the matching tasks in your list:
-                
-                """);
+        Mission Report: Matching Tasks Found
+        
+        """);
+
 
         for (Task t : tasks.getList()) {
             String description = t.getDescription();
