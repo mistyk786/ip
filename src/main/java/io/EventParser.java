@@ -1,5 +1,6 @@
 package io;
 
+import cortana.CortanaDateTimeException;
 import cortana.CortanaException;
 import tasks.Task;
 import tasks.Tasklist;
@@ -15,16 +16,14 @@ import java.time.format.DateTimeParseException;
 public class EventParser {
     /** SPECIFIC date formats for user input to follow */
     private static final DateTimeFormatter[] DATE_FORMATS = {
-            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
-            DateTimeFormatter.ofPattern("dd-MM-yyyy"),
             DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+            DateTimeFormatter.ofPattern("dd-MM-yyyy"),
     };
 
     /** SPECIFIC time formats for user input to follow */
     private static final DateTimeFormatter[] TIME_FORMATS = {
             DateTimeFormatter.ofPattern("HH:mm"),     // 24-hour format (17:30)
-            DateTimeFormatter.ofPattern("hh:mm a")    // 12-hour format with AM/PM (05:30 PM)
-
+            DateTimeFormatter.ofPattern("hh:mm a"),   // 12-hour format with AM/PM (05:30 PM)
     };
 
 
@@ -34,11 +33,10 @@ public class EventParser {
      * @return Date that is stored in Task
      * @throws DateTimeParseException Input does not match date formats
      */
-    private static String parseDate(String dateStr) throws DateTimeParseException {
+    private static LocalDate parseDate(String dateStr) throws DateTimeParseException {
         for (DateTimeFormatter format : DATE_FORMATS) {
             try {
-                LocalDate date = LocalDate.parse(dateStr, format);
-                return date.format(DATE_FORMATS[1]);
+                return LocalDate.parse(dateStr, format);
             } catch (DateTimeParseException ignored) {
             }
         }
@@ -59,11 +57,10 @@ public class EventParser {
      * @return Time that is stored in Task
      * @throws DateTimeParseException Input does not match time formats
      */
-    private static String parseTime(String timeStr) throws DateTimeParseException {
+    private static LocalTime parseTime(String timeStr) throws DateTimeParseException {
         for (DateTimeFormatter format : TIME_FORMATS) {
             try {
-                LocalTime time = LocalTime.parse(timeStr, format);
-                return time.format(TIME_FORMATS[1]);
+                return LocalTime.parse(timeStr, format);
             } catch (DateTimeParseException ignored) {
             }
         }
@@ -113,13 +110,13 @@ public class EventParser {
                     throw new CortanaException("Invalid Deadline format: Missing date/time.");
                 }
 
-                String[] deadlineParts = parts[3].split(" ");
+                String[] deadlineParts = parts[3].split(" ", 2);
                 if (deadlineParts.length < 2) {
-                    throw new CortanaException("Invalid deadline format: Please provide both date and time.");
+                    throw new CortanaDateTimeException();
                 }
 
-                String date = parseDate(deadlineParts[0]);
-                String time = parseTime(deadlineParts[1]);
+                LocalDate date = parseDate(deadlineParts[0]);
+                LocalTime time = parseTime(deadlineParts[1]);
 
                 Deadline deadline = new Deadline(description, date, time);
                 if (isDone) {
@@ -128,20 +125,20 @@ public class EventParser {
                 return deadline;
             case "E":
                 if (parts.length < 5) {
-                    throw new CortanaException("Invalid Event format: Missing start or end date/time.");
+                    throw new CortanaException("Invalid event format: Missing start or end date/time.");
                 }
 
-                String[] eventStartParts = parts[3].split(" ");
-                String[] eventEndParts = parts[4].split(" ");
+                String[] eventStartParts = parts[3].split(" ", 2);
+                String[] eventEndParts = parts[4].split(" ", 2);
 
                 if (eventStartParts.length < 2 || eventEndParts.length < 2) {
-                    throw new CortanaException("Invalid event format: Please provide both start and end date/time.");
+                    throw new CortanaDateTimeException();
                 }
 
-                String eventDateStart = parseDate(eventStartParts[0]);
-                String eventTimeStart = parseTime(eventStartParts[1]);
-                String eventDateEnd = parseDate(eventEndParts[0]);
-                String eventTimeEnd = parseTime(eventEndParts[1]);
+                LocalDate eventDateStart = parseDate(eventStartParts[0]);
+                LocalTime eventTimeStart = parseTime(eventStartParts[1]);
+                LocalDate eventDateEnd = parseDate(eventEndParts[0]);
+                LocalTime eventTimeEnd = parseTime(eventEndParts[1]);
 
                 Event event = new Event(description, eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd);
                 if (isDone) {
@@ -165,23 +162,18 @@ public class EventParser {
      * or other incorrect fields
      */
     public static String parseTask(String line, String taskType, Tasklist tasks) throws CortanaException {
-        String output;
+        String output = "";
         try {
             switch (taskType) {
             case "todo":
-                ToDo todo = new ToDo(line.toLowerCase());
+                ToDo todo = new ToDo(line);
                 tasks.addTask(todo);
                 output =  Ui.print("Task added:\n" + todo.toString());
                 break;
             case "deadline":
                 String[] parts = line.split(" /by ", 2);
                 if (parts.length != 2) {
-                    throw new CortanaException("""
-                Invalid task format: Missing date/time.
-                Use the following format for deadlines:
-                deadline [message] /by [YYYY-MM-DD] [HH:mm]
-                Example: deadline Submit Report /by 2024-02-20 23:59
-                """);
+                    throw new CortanaDateTimeException();
                 }
 
                 String deadlineDescription = parts[0].trim();
@@ -189,33 +181,24 @@ public class EventParser {
 
                 String[] dateTimeParts = deadlineString.split(" ");
                 if (dateTimeParts.length < 2) {
-                    throw new CortanaException("""
-                Invalid deadline format. Please provide both date and time.
-                Use format: YYYY-MM-DD HH:mm
-                Example: deadline Submit Report /by 2024-02-20 23:59
-                """);
+                    throw new CortanaDateTimeException();
                 }
 
                 try {
-                    String date = parseDate(dateTimeParts[0]);
-                    String time = parseTime(dateTimeParts[1]);
+                    LocalDate date = parseDate(dateTimeParts[0]);
+                    LocalTime time = parseTime(dateTimeParts[1]);
 
                     Deadline deadline = new Deadline(deadlineDescription, date, time);
                     tasks.addTask(deadline);
                     output = Ui.print("Task added:\n" + deadline.toString());
                 } catch (DateTimeParseException e) {
-                    throw new CortanaException("Error parsing date or time: " + e.getParsedString());
+                    throw new CortanaDateTimeException();
                 }
                 break;
             case "event":
                 String[] parts2 = line.split(" /from | /to ");
                 if (parts2.length != 3) {
-                    throw new CortanaException("""
-                Invalid task format: Missing date/time.
-                Use the following format for events:
-                event [message] /from [YYYY-MM-DD] [HH:mm] /to [YYYY-MM-DD] [HH:mm]
-                Example: event Meeting /from 2024-02-20 14:00 /to 2024-02-20 16:00
-                """);
+                    throw new CortanaDateTimeException();
                 }
 
                 String eventDescription = parts2[0].trim();
@@ -226,29 +209,27 @@ public class EventParser {
                 String[] endParts = eventEndString.split(" ");
 
                 if (startParts.length < 2 || endParts.length < 2) {
-                    throw new CortanaException("""
-                Invalid date/time format. Please provide both date and time.
-                Use format: YYYY-MM-DD HH:mm
-                Example: event Meeting /from 2024-02-20 14:00 /to 2024-02-20 16:00
-                """);
+                    throw new CortanaDateTimeException();
                 }
 
                 try {
-                    String startDate = parseDate(startParts[0]);
-                    String startTime = parseTime(startParts[1]);
-                    String endDate = parseDate(endParts[0]);
-                    String endTime = parseTime(endParts[1]);
+                    LocalDate startDate = parseDate(startParts[0]);
+                    LocalTime startTime = parseTime(startParts[1]);
+                    LocalDate endDate = parseDate(endParts[0]);
+                    LocalTime endTime = parseTime(endParts[1]);
 
                     Event event = new Event(eventDescription, startDate, endDate, startTime, endTime);
                     tasks.addTask(event);
+                    output = Ui.print("Task added:\n" + event.toString());
                 } catch (DateTimeParseException e) {
-                    throw new CortanaException("Error parsing date or time: " + e.getParsedString());
+                    throw new CortanaDateTimeException();
                 }
+                break;
             default:
                 throw new CortanaException("Unknown task type: " + taskType);
             }
         } catch (DateTimeParseException e) {
-            return Ui.showError(e.getMessage());
+            throw new CortanaDateTimeException();
         }
         return output;
     }

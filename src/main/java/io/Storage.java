@@ -28,21 +28,9 @@ public class Storage {
      * @throws CortanaException File is not found || Error in reading data from file
      */
     public Tasklist loadTasks() throws CortanaException {
-        String directoryPath = new File(filePath).getParent();
-        File dir = new File(directoryPath);
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                throw new CortanaException("Failed to create data directory.");
-            }
-        }
-
         File dataFile = new File(filePath);
         if (!dataFile.exists()) {
-            try {
-                dataFile.createNewFile();
-            } catch (IOException e) {
-                throw new CortanaException("Error creating data file: " + e.getMessage());
-            }
+            throw new CortanaException("Error loading data file.");
         }
 
         try {

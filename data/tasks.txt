@@ -1,8 +1,1 @@
-T |   | borrow books
-T |   | finish chatbot
-D |   | finish chatbot | 19-12-2025 11:30 am
-D |   | finish branches | 19-12-2025 11:59 am
-D | X | revise presentation | 20-12-2025 11:30 am
-D |   | enjoy weekend | 22-02-2025 09:00 am
-E |   | go to sleep | 20-12-2025 02:00 am | 20-12-2025 08:00 am
-D |   | go to sleeppp | 20-12-2025 02:00 am
+

@@ -1,6 +1,7 @@
 package commands;
 
 import tasks.Tasklist;
+import tasks.Task;
 import io.Ui;
 
 public class ListCommand extends Command {
@@ -11,6 +12,7 @@ public class ListCommand extends Command {
     @Override
     public String execute(Tasklist tasks) {
         StringBuilder sb = new StringBuilder();
+        sb.append("Here are the tasks in your list:\n\n");
 
         if (!message.isEmpty()) {
             return Ui.showError(String.format("""
@@ -20,10 +22,11 @@ public class ListCommand extends Command {
         }
 
         if (tasks.isEmpty()) {
-            return Ui.showError(" Your list is empty!");
+            return Ui.showError("Your list is empty!");
         }
-
-        sb.append(String.format("Here are the tasks in your list:\n\n%s", tasks.toString()));
+        for (Task t : tasks.getList()) {
+            sb.append(t.toString()).append("\n");
+        }
         return sb.toString();
     }
 }
