@@ -1,18 +1,16 @@
 package cortana;
 
 import java.io.IOException;
-import java.net.URL;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
 public class Main extends Application {
 
-    private static final String FILE_PATH = "data/tasks.txt";
+    private static final String FILE_PATH = "src/main/java/data/tasks.txt";
     private final Cortana cortana = new Cortana(FILE_PATH);
 
     @Override

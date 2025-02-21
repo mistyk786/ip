@@ -18,6 +18,7 @@ public class EventParser {
     private static final DateTimeFormatter[] DATE_FORMATS = {
             DateTimeFormatter.ofPattern("dd/MM/yyyy"),
             DateTimeFormatter.ofPattern("dd-MM-yyyy"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd"),
     };
 
     /** SPECIFIC time formats for user input to follow */

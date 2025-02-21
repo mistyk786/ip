@@ -7,20 +7,20 @@ import tasks.Task;
 import tasks.Tasklist;
 import tasks.ToDo;
 
-/*import java.time.LocalDate;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
-//simport org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class EventParserTest {
 
     @Test
-    void testParseTaskFromFile_validTodo() throws CortanaException {
-        String input = "T |  | Read book";
+    public void testParseTaskFromFile_validTodo() throws CortanaException {
+        String input = "T |   | Read book";
         Task task = EventParser.parseTaskFromFile(input);
         assertInstanceOf(ToDo.class, task);
         assertEquals("Read book", task.getDescription());
@@ -28,8 +28,8 @@ public class EventParserTest {
     }
 
     @Test
-    void testParseTaskFromFile_validDeadline() throws CortanaException {
-        String input = "D |  | Submit assignment | 2025-02-15 23:59";
+    public void testParseTaskFromFile_validDeadline() throws CortanaException {
+        String input = "D |   | Submit assignment | 2025-02-15 23:59";
         Task task = EventParser.parseTaskFromFile(input);
         assertInstanceOf(Deadline.class, task);
         Deadline deadline = (Deadline) task;
@@ -39,27 +39,20 @@ public class EventParserTest {
     }
 
     @Test
-    void testParseTaskFromFile_validEvent() throws CortanaException {
+    public void testParseTaskFromFile_validEvent() throws CortanaException {
         String input = "E | X | Meeting | 2025-02-20 10:00 | 2025-02-20 11:00";
         Task task = EventParser.parseTaskFromFile(input);
         assertInstanceOf(Event.class, task);
         Event event = (Event) task;
         assertEquals("Meeting", event.getDescription());
-        assertEquals(LocalDate.of(2025, 2, 20), event.getStartDate());
-        assertEquals(LocalTime.of(10, 0), event.getStartTime());
-        assertEquals(LocalDate.of(2025, 2, 20), event.getEndDate());
-        assertEquals(LocalTime.of(11, 0), event.getEndTime());
-        assertTrue(event.isDone());
+        assertEquals(LocalDate.of(2025, 2, 20), event.getDate());
+        assertEquals(LocalTime.of(11, 0), event.getTime());
+        assertEquals("X", event.getStatusIcon());
     }
 
-    @Test
-    void testParseTaskFromFile_invalidFormat() {
-        String input = "X | Something invalid";
-        assertThrows(CortanaException.class, EventParser.parseTaskFromFile(input));
-    }
 
     @Test
-    void testParseTask_validTodo() throws CortanaException {
+    public void testParseTask_validTodo() throws CortanaException {
         Tasklist tasks = new Tasklist();
         EventParser.parseTask("Read book", "todo", tasks);
         assertEquals(1, tasks.size());
@@ -68,9 +61,9 @@ public class EventParserTest {
     }
 
     @Test
-    void testParseTask_validDeadline() throws CortanaException {
+    public void testParseTask_validDeadline() throws CortanaException {
         Tasklist tasks = new Tasklist();
-        EventParser.parseTask("deadline Submit assignment /by 2025-02-15 23:59", "deadline", tasks);
+        EventParser.parseTask("Submit assignment /by 2025-02-15 23:59", "deadline", tasks);
         assertEquals(1, tasks.size());
         assertInstanceOf(Deadline.class, tasks.getTask(0));
         Deadline deadline = (Deadline) tasks.getTask(0);
@@ -80,28 +73,14 @@ public class EventParserTest {
     }
 
     @Test
-    void testParseTask_validEvent() throws CortanaException {
+    public void testParseTask_validEvent() throws CortanaException {
         Tasklist tasks = new Tasklist();
-        EventParser.parseTask("event Meeting /from 2025-02-20 10:00 /to 2025-02-20 11:00", "event", tasks);
+        EventParser.parseTask("Meeting /from 2025-02-20 10:00 /to 2025-02-20 11:00", "event", tasks);
         assertEquals(1, tasks.size());
         assertInstanceOf(Event.class, tasks.getTask(0));
         Event event = (Event) tasks.getTask(0);
         assertEquals("Meeting", event.getDescription());
-        assertEquals(LocalDate.of(2025, 2, 20), event.getStartDate());
-        assertEquals(LocalTime.of(10, 0), event.getStartTime());
-        assertEquals(LocalDate.of(2025, 2, 20), event.getEndDate());
-        assertEquals(LocalTime.of(11, 0), event.getEndTime());
+        assertEquals(LocalDate.of(2025, 2, 20), event.getDate());
+        assertEquals(LocalTime.of(11, 0), event.getTime());
     }
-
-    @Test
-    void testParseTask_invalidDeadlineFormat() throws CortanaException {
-        Tasklist tasks = new Tasklist();
-        assertThrows(CortanaException.class, EventParser.parseTask("Submit assignment", "deadline", tasks));
-    }
-
-    @Test
-    void testParseTask_invalidEventFormat() {
-        Tasklist tasks = new Tasklist();
-        assertThrows(CortanaException.class, EventParser.parseTask("Meeting /from 2025-02-20", "event", tasks));
-    }
-}*/
+}
