@@ -1,26 +1,100 @@
-# Duke project template
+# 📖 Cortana User Guide Summary
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+Cortana is a command-line assistant that helps you manage tasks efficiently. Designed for **fast** and **intuitive** task management, it combines the **speed of CLI** with the **benefits of a GUI**.
 
-## Setting up in Intellij
+---
 
-Prerequisites: JDK 17, update Intellij to the most recent version.
+## 🚀 **Quick Start**
+1. **Download** and run the program.
+2. **Use the commands below** to interact with Cortana.
+3. Cortana **automatically saves your tasks**.
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+---
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+## 🛠 **Features**
+### 📌 **Viewing Help**
+- **Command:** `help`
+- **Description:** Displays the list of available commands.
+
+### ✏️ **Adding a Task**
+#### **To-Do**
+- **Command:** `todo [task description]`
+- **Example:** `todo Finish Halo Campaign`
+
+#### **Deadline**
+- **Command:** `deadline [task description] /by [YYYY-MM-DD HH:mm]`
+- **Example:** `deadline Submit Report /by 2024-02-20 23:59`
+
+#### **Event**
+- **Command:** `event [task description] /from [YYYY-MM-DD HH:mm] /to [YYYY-MM-DD HH:mm]`
+- **Example:** `event UNSC Briefing /from 2024-02-21 14:00 /to 2024-02-21 16:00`
+
+### 📋 **Listing All Tasks**
+- **Command:** `list`
+- **Description:** Displays all tasks in your list.
+
+### ✅ **Marking a Task as Done**
+- **Command:** `mark [task number]`
+- **Example:** `mark 2`
+- **Description:** Marks task `2` as completed.
+
+### ❌ **Unmarking a Task**
+- **Command:** `unmark [task number]`
+- **Example:** `unmark 2`
+- **Description:** Unmarks task `2` as not completed.
+
+### 🔍 **Finding Tasks by Keywords**
+- **Command:** `find [keyword]`
+- **Example:** `find Halo`
+- **Description:** Searches for tasks containing the word `"Halo"`.
+
+### 🗑 **Deleting a Task**
+- **Command:** `delete [task number]`
+- **Example:** `delete 3`
+- **Description:** Removes task `3` from the list.
+
+### 🔥 **Deleting All Tasks**
+- **Command:** `delete all`
+- **Description:** Clears all tasks.
+
+### ⏰ **Task Reminders**
+- **Command:** `reminder`
+- **Description:** Displays tasks due within the next **24 hours**.
+
+## ❓ **FAQ**
+**Q: How do I undo a command?**  
+A: Currently, there is no undo feature. Be careful when deleting tasks.
+
+**Q: How do I manually edit my tasks?**  
+A: Open `data/tasks.txt` and modify the entries. Use **caution** to maintain correct formatting.
+
+**Q: How do I exit the program?**  
+A: Use the `exit` command.
+
+---
+
+## ⚠️ **Known Issues**
+- `find` command is **case-sensitive**.
+- Does not support **multiple reminders at different intervals** (coming soon).
+
+---
+
+## 📜 **Command Summary**
+| **Command** | **Description** | **Example** |
+|------------|----------------|-------------|
+| `help` | View available commands | `help` |
+| `todo` | Add a To-Do task | `todo Buy milk` |
+| `deadline` | Add a Deadline task | `deadline Homework /by 2024-02-20 23:59` |
+| `event` | Add an Event task | `event Meeting /from 2024-02-21 14:00 /to 2024-02-21 16:00` |
+| `list` | List all tasks | `list` |
+| `mark` | Mark a task as done | `mark 2` |
+| `unmark` | Unmark a completed task | `unmark 2` |
+| `find` | Search tasks by keyword | `find Report` |
+| `delete` | Delete a specific task | `delete 3` |
+| `delete all` | Delete all tasks | `delete all` |
+| `reminder` | Show tasks due in 24 hours | `reminder` |
+| `save` | Save the current task list | `save` |
+| `exit` | Exit the application | `exit` |
+
+---
+
