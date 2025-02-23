@@ -28,7 +28,7 @@ public class Ui {
         -  delete [task number] → Deletes a task.
         -  find [keyword] → Searches for tasks containing the keyword.
 
-           Settings & Utility**
+           Settings & Utility
         -  help → Displays this command list.
         -  bye → Exits the program.
         

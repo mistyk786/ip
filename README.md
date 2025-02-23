@@ -1,6 +1,7 @@
 # 📖 Cortana User Guide Summary
-
 Cortana is a command-line assistant that helps you manage tasks efficiently. Designed for **fast** and **intuitive** task management, it combines the **speed of CLI** with the **benefits of a GUI**.
+
+![title](./docs/Ui.png)
 
 ---
 

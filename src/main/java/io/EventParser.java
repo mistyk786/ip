@@ -180,7 +180,7 @@ public class EventParser {
                 String deadlineDescription = parts[0].trim();
                 String deadlineString = parts[1].trim();
 
-                String[] dateTimeParts = deadlineString.split(" ");
+                String[] dateTimeParts = deadlineString.split(" ", 2);
                 if (dateTimeParts.length < 2) {
                     throw new CortanaDateTimeException();
                 }
@@ -206,8 +206,8 @@ public class EventParser {
                 String eventStartString = parts2[1].trim();
                 String eventEndString = parts2[2].trim();
 
-                String[] startParts = eventStartString.split(" ");
-                String[] endParts = eventEndString.split(" ");
+                String[] startParts = eventStartString.split(" ", 2);
+                String[] endParts = eventEndString.split(" ", 2);
 
                 if (startParts.length < 2 || endParts.length < 2) {
                     throw new CortanaDateTimeException();
